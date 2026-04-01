@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./loginSchema";
 
-function Login() {
+function Login({ switchToSignup, switchToForgot }) {
   const [show, setShow] = useState(false);
 
   const {
@@ -15,7 +15,7 @@ function Login() {
     formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    mode: "onChange", // real-time validation
+    mode: "onChange",
   });
 
   const onSubmit = (data) => {
@@ -23,25 +23,26 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-black px-4">
+    <div className="w-full">
+      <div className="flex flex-col md:flex-row w-full rounded-2xl overflow-hidden border border-yellow-500/20">
 
-      <div className="flex w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-yellow-500/20">
-
-        {/* LEFT */}
+        {/* LEFT (Animation) */}
         <div className="hidden md:flex w-1/2 items-center justify-center bg-black">
-<Lottie
-  path="https://assets7.lottiefiles.com/packages/lf20_fcfjwiyb.json"
-  className="w-80"
-/>
+          <Lottie
+            path="https://assets7.lottiefiles.com/packages/lf20_fcfjwiyb.json"
+            className="w-64 lg:w-80"
+          />
         </div>
 
-        {/* RIGHT */}
-        <div className="w-full md:w-1/2 bg-[#111] p-8">
-          <h2 className="text-3xl font-bold text-yellow-400 mb-6 text-center">
+        {/* RIGHT (Form) */}
+        <div className="w-full md:w-1/2 bg-[#111] p-5 sm:p-6 md:p-8">
+
+          {/* Title */}
+          <h2 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-6 text-center">
             Login
           </h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
             {/* EMAIL */}
             <div>
@@ -49,12 +50,12 @@ function Login() {
                 type="email"
                 placeholder="Email"
                 {...register("email")}
-                className={`w-full p-3 rounded-lg bg-black text-white border 
+                className={`w-full px-4 py-3 text-sm sm:text-base rounded-lg bg-black text-white border 
                 ${errors.email ? "border-red-500" : "border-gray-700"} 
                 focus:outline-none focus:border-yellow-400`}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-xs mt-1">
                   {errors.email.message}
                 </p>
               )}
@@ -66,30 +67,46 @@ function Login() {
                 type={show ? "text" : "password"}
                 placeholder="Password"
                 {...register("password")}
-                className={`w-full p-3 rounded-lg bg-black text-white border pr-10
+                className={`w-full px-4 py-3 text-sm sm:text-base rounded-lg bg-black text-white border pr-10
                 ${errors.password ? "border-red-500" : "border-gray-700"}
                 focus:outline-none focus:border-yellow-400`}
               />
 
-              {/* Eye Toggle */}
+              {/* Eye Icon */}
               <div
                 onClick={() => setShow(!show)}
-                className="absolute right-3 top-3 cursor-pointer text-gray-400 hover:text-yellow-400"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-yellow-400"
               >
                 {show ? <EyeOff size={20} /> : <Eye size={20} />}
               </div>
 
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-xs mt-1">
                   {errors.password.message}
                 </p>
               )}
             </div>
 
+            {/* 🔥 Remember + Forgot */}
+            <div className="flex items-center justify-between text-xs">
+              <label className="flex items-center gap-2 text-gray-400">
+                <input type="checkbox" className="accent-yellow-400" />
+                Remember me
+              </label>
+
+              <button
+                type="button"
+                onClick={switchToForgot}
+                className="text-yellow-400 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+
             {/* BUTTON */}
             <button
               disabled={!isValid}
-              className={`w-full p-3 rounded-lg font-semibold transition 
+              className={`w-full py-3 rounded-lg font-semibold transition 
               ${
                 isValid
                   ? "bg-yellow-400 text-black hover:bg-yellow-300"
@@ -101,12 +118,17 @@ function Login() {
 
           </form>
 
-          <p className="text-gray-400 text-sm text-center mt-6">
+          {/* Switch to Signup */}
+          <p className="text-gray-400 text-xs sm:text-sm text-center mt-6">
             New here?{" "}
-            <span className="text-yellow-400 cursor-pointer hover:underline">
+            <span
+              onClick={switchToSignup}
+              className="text-yellow-400 cursor-pointer hover:underline"
+            >
               Create account
             </span>
           </p>
+
         </div>
       </div>
     </div>

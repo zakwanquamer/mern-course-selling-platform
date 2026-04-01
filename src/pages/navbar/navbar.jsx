@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState  } from "react";
 import { Menu, X, User } from "lucide-react";
+import LoginModal from "../user/LoginModel";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-
+  const [showAuth, setShowAuth] = useState(false);
+  const [authMode, setAuthMode] = useState("login");
   return (
     <nav className="bg-black/90 backdrop-blur-md text-white sticky top-0 z-50 border-b border-yellow-500/20">
-      
+
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
 
         {/* 🔥 Logo */}
@@ -17,10 +19,10 @@ const Navbar = () => {
 
         {/* 🖥 Desktop Menu */}
         <ul className="hidden md:flex gap-8 text-sm font-medium text-gray-400">
-          
+
           {["Home", "Courses", "Services", "Pricing", "Contact"].map((item, i) => (
             <li key={i} className="relative group cursor-pointer">
-              
+
               <span className="group-hover:text-yellow-400 transition duration-300">
                 {item}
               </span>
@@ -36,12 +38,24 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-4">
 
           {/* Login */}
-          <button className="flex items-center gap-1 text-sm text-gray-400 hover:text-yellow-400 transition">
-            <User size={18} /> Login
+          <button
+            onClick={() => {
+              setAuthMode("login");
+              setShowAuth(true);
+            }}
+            className="flex items-center gap-1 text-sm text-gray-400 hover:text-yellow-400 transition"
+          >
+            Login
           </button>
 
           {/* Register */}
-          <button className="px-4 py-1.5 rounded-lg border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition">
+          <button
+            onClick={() => {
+              setAuthMode("signup");
+              setShowAuth(true);
+            }}
+            className="px-4 py-1.5 rounded-lg border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+          >
             Register
           </button>
 
@@ -70,7 +84,7 @@ const Navbar = () => {
       {/* 📱 Mobile Menu */}
       {open && (
         <div className="md:hidden bg-black px-6 pb-5 border-t border-yellow-500/20">
-          
+
           <ul className="flex flex-col gap-4 text-gray-400 mt-4">
             {["Home", "Courses", "Services", "Pricing", "Contact"].map((item, i) => (
               <li key={i} className="hover:text-yellow-400 transition cursor-pointer">
@@ -81,11 +95,22 @@ const Navbar = () => {
 
           <div className="flex flex-col gap-3 mt-5">
 
-            <button className="flex items-center justify-center gap-2 border border-yellow-400 text-yellow-400 py-2 rounded-lg hover:bg-yellow-400 hover:text-black transition">
+            <button
+              onClick={() => {
+                setAuthMode("login");
+                setShowAuth(true);
+              }}
+              className="flex items-center justify-center gap-2 border border-yellow-400 text-yellow-400 py-2 rounded-lg hover:bg-yellow-400 hover:text-black transition"
+            >
               <User size={18} /> Login
             </button>
 
-            <button className="py-2 border border-yellow-400 text-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition">
+            <button
+              onClick={() => {
+                setAuthMode("signup");
+                setShowAuth(true);
+              }}
+              className="py-2 border border-yellow-400 text-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition">
               Register
             </button>
 
@@ -100,7 +125,15 @@ const Navbar = () => {
           </div>
         </div>
       )}
+     
+       <LoginModal
+  isOpen={showAuth}
+  onClose={() => setShowAuth(false)}
+  initialMode={authMode}
+/>
+    
     </nav>
+
   );
 };
 
